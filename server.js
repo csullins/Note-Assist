@@ -5,8 +5,6 @@ const fs = require('fs');
 const uuid = require('./helpers/uuid');
 const app = express();
 
-app.listen(process.env.PORT);
-
 let port = process.env.PORT;
 if (port == null || port == "") {
   port = 8000;
@@ -110,7 +108,6 @@ app.post('/api/notes', (req, res) => {
     })
 
 app.listen(port, () =>
-  console.log(`App listening at http://localhost:${PORT} 🚀`)
+  console.log(`App listening at http://localhost:${port} 🚀`)
   );
-  
-  
+ 
