@@ -1,10 +1,5 @@
 [
     {
-        "title": "Test Title",
-        "text": "Test text",
-        "id": "uuid()"
-    },
-    {
         "title": "Groceries",
         "text": "Apples\nMilk\nEggs\nice cream",
         "id": "cab4"
@@ -18,5 +13,10 @@
         "title": "Wash Car",
         "text": "got to misterCarWash",
         "id": "54a4"
+    },
+    {
+        "title": "Pay Bills",
+        "text": "house, car, netflix",
+        "id": "3258"
     }
 ]
