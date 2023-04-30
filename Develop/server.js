@@ -24,26 +24,22 @@ app.get('/notes', (req, res) => {
 
 // GET request for existing notes
 app.get('/api/notes', (req, res) => {
- 
+
   fs.readFile('db/db.json', 'utf8', (err, data) => {
     if (err) {
       console.error(err);
     }
     else {
-      // console.log(data)
       // Convert string into JSON object
       const parsedNotes = JSON.parse(data);
       res.json(parsedNotes); 
     }
   });
-  // Log our request to the terminal
+  // Log the request to the terminal
   console.info(`${req.method} request received to get notes`);
 });
   
-// POST request to add a review
 app.post('/api/notes', (req, res) => {
-    // Log that a POST request was received
-    console.info(`${req.method} request received to add a note`);
   
   // Destructuring assignment for the items in req.body
   const { title, text } = req.body;
@@ -54,7 +50,7 @@ app.post('/api/notes', (req, res) => {
     const newNote = {
       title,
       text,
-      review_id: uuid(),
+      id: uuid(),
     };
     // Obtain existing notes
     fs.readFile('db/db.json', 'utf8', (err, data) => {
@@ -72,8 +68,7 @@ app.post('/api/notes', (req, res) => {
             JSON.stringify(parsedNotes, null, 4),
             (writeErr) =>
               writeErr
-                ? console.error(writeErr)
-                : console.info('Successfully updated notes!')
+                ? console.error(writeErr) : console.info('Successfully updated notes after adding new note!')
           );
         }
       });
@@ -81,16 +76,37 @@ app.post('/api/notes', (req, res) => {
         status: 'success',
         body: newNote,
       };
-  
-      console.log(response);
       res.status(201).json(response);
     } else {
       res.status(500).json('Error in posting new note');
     }
   });
   
-  app.listen(PORT, () =>
-    console.log(`App listening at http://localhost:${PORT} 🚀`)
-  );
+  app.delete('/api/notes/:id', (req, res) => {
 
+    const idParam = req.params.id;
+
+    // Read the notes from the file
+    const notes = JSON.parse(fs.readFileSync('db/db.json'));
+
+    // Find the index of the note with the given ID
+     const noteToDelete = notes.findIndex((notes) => notes.id === idParam);
+
+    // Delete the note with specified id
+    notes.splice(noteToDelete, 1);
+    
+        // Write updated note back to the file
+        fs.writeFile('db/db.json',
+        JSON.stringify(notes, null, 4),
+        (writeErr) =>
+          writeErr
+            ? console.error(writeErr) : console.info('Successfully updated notes after deletion')
+      ); 
+      res.status(201).json('success');
+    })
+
+  app.listen(PORT, () =>
+  console.log(`App listening at http://localhost:${PORT} 🚀`)
+  );
+  
   
